@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState, useCallback } from "react"
 import { type Match, FLAG_MAP } from "@/lib/bolobet"
 import { Navbar, type Page } from "@/components/navbar"
@@ -73,7 +72,7 @@ function App() {
       )}
       {ready && (
         <>
-          {page === "home" && <HomeView stats={stats} onNavigate={setPage} />}
+          {page === "home" && <HomeView stats={stats} onNavigate={setPage} onBetMatch={(id) => setBetMatch(matches.find(m => m.id === id) ?? null)} />}
           {page === "jogos" && <JogosView matches={matches} onBet={(id) => setBetMatch(matches.find(m => m.id === id) ?? null)} />}
           {page === "ranking" && <RankingView matches={matches} />}
           {page === "minhas-apostas" && <MinhasApostasView />}
