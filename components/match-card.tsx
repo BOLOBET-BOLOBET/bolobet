@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, ChevronRight, Lock, Trophy } from "lucide-react"
+import { Lock, Flame } from "lucide-react"
 import { type Match, formatMatchDate, formatBRL } from "@/lib/bolobet"
 
 export function MatchCard({
@@ -8,55 +8,100 @@ export function MatchCard({
   prize,
   openable,
   onBet,
+  apostasInfo,
 }: {
   match: Match
   prize: number
   openable: boolean
   onBet?: (id: number) => void
+  apostasInfo?: { total: number; porPlacar: Record<string, number> }
 }) {
+  const totalApostas = match.totalApostas ?? 0
+  const pote = totalApostas * 10
+  const premio = Math.floor(pote * 0.8)
+
   return (
-    <button
-      type="button"
-      disabled={!openable}
-      onClick={openable ? () => onBet?.(match.id) : undefined}
-      className={`group block w-full rounded-2xl border border-border bg-card p-4 text-left transition-all duration-300 ${
-        openable
-          ? "cursor-pointer hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_0_0_1px_var(--color-lime-glow),0_12px_32px_-12px_rgba(0,0,0,0.7)]"
-          : "opacity-70"
-      }`}
-    >
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-1.5 text-sm font-bold sm:gap-2 sm:text-lg">
-          <span className="text-xl leading-none sm:text-2xl">{match.homeFlag}</span>
-          <span className="truncate">{match.home}</span>
-          <span className="px-0.5 text-xs font-medium text-muted-foreground">vs</span>
-          <span className="text-xl leading-none sm:text-2xl">{match.awayFlag}</span>
-          <span className="truncate">{match.away}</span>
+    <div className={`rounded-2xl border bg-card p-4 transition-all duration-200 ${
+      openable ? "border-primary/30 hover:border-primary/60" : "border-border"
+    }`}>
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-sm font-bold">
+          <span className="text-2xl">{match.homeFlag}</span>
+          <span>{match.home}</span>
+          <span className="text-muted-foreground">×</span>
+          <span>{match.away}</span>
+          <span className="text-2xl">{match.awayFlag}</span>
         </div>
         {openable ? (
-          <span className="flex shrink-0 items-center gap-1 rounded-xl bg-primary px-3 py-2 text-sm font-extrabold text-primary-foreground transition-transform duration-200 group-hover:scale-105">
-            Apostar
-            <ChevronRight className="size-4" />
+          <span className="flex shrink-0 items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-xs font-bold text-primary">
+            <Flame className="size-3" /> Aberto
           </span>
         ) : (
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-xs font-bold text-muted-foreground">
-            <Lock className="size-3" /> Em breve
+          <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground">
+            <Lock className="size-3" /> Fechado
           </span>
         )}
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-2 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <Calendar className="size-3.5" />
-          {match.phase} · {formatMatchDate(match.date)}
-        </span>
-        {openable && (
-          <span className="flex items-center gap-1 rounded-full bg-primary/12 px-2.5 py-1 font-bold text-primary">
-            <Trophy className="size-3" />
-            {formatBRL(prize)}
-          </span>
-        )}
+      {/* Info */}
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        <span>{match.phase}</span>
+        <span>·</span>
+        <span>{formatMatchDate(match.date)}</span>
       </div>
-    </button>
+
+      {/* Stats */}
+      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+        <div className="rounded-xl bg-secondary/60 px-2 py-2">
+          <div className="text-base font-extrabold text-primary">{totalApostas}</div>
+          <div className="text-[10px] text-muted-foreground">apostas</div>
+        </div>
+        <div className="rounded-xl bg-secondary/60 px-2 py-2">
+          <div className="text-base font-extrabold text-primary">{formatBRL(pote)}</div>
+          <div className="text-[10px] text-muted-foreground">pote total</div>
+        </div>
+        <div className="rounded-xl bg-secondary/60 px-2 py-2">
+          <div className="text-base font-extrabold text-primary">{formatBRL(premio)}</div>
+          <div className="text-[10px] text-muted-foreground">prêmio (80%)</div>
+        </div>
+      </div>
+
+      {/* Placares mais apostados */}
+      {apostasInfo && apostasInfo.total > 0 && (
+        <div className="mt-3">
+          <p className="mb-1.5 text-xs font-semibold text-muted-foreground">Placares mais apostados:</p>
+          <div className="flex flex-wrap gap-1.5">
+            {Object.entries(apostasInfo.porPlacar)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 5)
+              .map(([placar, count]) => (
+                <span key={placar} className={`rounded-lg px-2.5 py-1 text-xs font-bold ${
+                  count >= 3
+                    ? "bg-destructive/15 text-destructive"
+                    : count === 2
+                    ? "bg-amber-500/15 text-amber-500"
+                    : "bg-secondary text-muted-foreground"
+                }`}>
+                  {placar} <span className="opacity-70">({count}/3)</span>
+                </span>
+              ))}
+          </div>
+          <p className="mt-1.5 text-[10px] text-muted-foreground">
+            Placares em vermelho já têm 3 apostas (lotado). Em amarelo, 2 apostas.
+          </p>
+        </div>
+      )}
+
+      {/* Botão apostar */}
+      {openable && onBet && (
+        <button
+          onClick={() => onBet(match.id)}
+          className="mt-3 w-full rounded-xl bg-primary py-2.5 text-sm font-extrabold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30"
+        >
+          Apostar agora — {formatBRL(10)}
+        </button>
+      )}
+    </div>
   )
 }

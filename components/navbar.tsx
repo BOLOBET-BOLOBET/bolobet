@@ -1,23 +1,17 @@
 "use client"
 
-import { Home, Trophy, ListChecks, Settings } from "lucide-react"
+import { Home, Trophy, ListChecks, Ticket } from "lucide-react"
 
-export type Page = "home" | "jogos" | "ranking" | "admin"
+export type Page = "home" | "jogos" | "ranking" | "minhas-apostas"
 
 const links: { id: Page; label: string; icon: typeof Home }[] = [
   { id: "home", label: "Início", icon: Home },
   { id: "jogos", label: "Jogos", icon: ListChecks },
   { id: "ranking", label: "Ranking", icon: Trophy },
-  { id: "admin", label: "Admin", icon: Settings },
+  { id: "minhas-apostas", label: "Minhas Apostas", icon: Ticket },
 ]
 
-export function Navbar({
-  page,
-  onNavigate,
-}: {
-  page: Page
-  onNavigate: (p: Page) => void
-}) {
+export function Navbar({ page, onNavigate }: { page: Page; onNavigate: (p: Page) => void }) {
   return (
     <nav className="fixed left-1/2 top-4 z-[1000] w-[calc(100%-1.5rem)] max-w-3xl -translate-x-1/2">
       <div className="glass flex items-center justify-between gap-2 rounded-2xl border border-border/80 px-3 py-2.5 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] sm:px-5">
@@ -28,9 +22,7 @@ export function Navbar({
           <span className="grid size-7 place-items-center rounded-lg bg-primary text-primary-foreground">
             <Trophy className="size-4" />
           </span>
-          <span className="ml-2">
-            Bolo<span className="text-primary">Bet</span>
-          </span>
+          <span className="ml-2">Bolo<span className="text-primary">Bet</span></span>
         </button>
 
         <div className="hide-scrollbar flex items-center gap-1 overflow-x-auto">
@@ -39,7 +31,6 @@ export function Navbar({
             return (
               <button
                 key={id}
-                data-page={id}
                 onClick={() => onNavigate(id)}
                 className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   active

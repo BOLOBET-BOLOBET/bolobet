@@ -10,7 +10,7 @@ const steps = [
   "Defina o placar exato (máx. 3 pessoas por placar)",
   "Informe seu nome e WhatsApp",
   "Pague R$10 via Pix e envie o comprovante",
-  "80% do total arrecadado no jogo vai para quem acertar o placar (dividido entre os vencedores). 20% fica retido para manutenção e custos da plataforma.",
+  "80% do total arrecadado vai para quem acertar o placar exato. 20% fica para manutenção da plataforma.",
 ]
 
 export function HomeView({
@@ -27,9 +27,9 @@ export function HomeView({
   ]
 
   return (
-    <div className="animate-fade-up">
-      {/* Banner */}
-      <div className="mx-auto max-w-5xl px-4 pt-4 sm:px-5">
+    <div className="animate-fade-up pt-24">
+      {/* Banner — abaixo do navbar */}
+      <div className="mx-auto max-w-5xl px-4 sm:px-5">
         <button
           onClick={() => onNavigate("jogos")}
           aria-label="Apostar agora"
@@ -57,9 +57,10 @@ export function HomeView({
 
         <button
           onClick={() => onNavigate("jogos")}
-          className="group mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/40 active:translate-y-0"
+          className="group mt-6 inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-sm font-extrabold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0"
+          style={{ background: "#16a34a", color: "#fff", boxShadow: "0 4px 24px 0 #16a34a55" }}
         >
-          Apostar agora
+          ⚽ Apostar agora
           <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
         </button>
 
@@ -85,17 +86,24 @@ export function HomeView({
         </h2>
         <ol className="overflow-hidden rounded-3xl border border-border bg-card">
           {steps.map((step, i) => (
-            <li
-              key={i}
-              className="flex gap-4 border-b border-border px-5 py-4 last:border-b-0"
-            >
-              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/15 text-sm font-bold text-primary">
+            <li key={i} className="flex gap-4 border-b border-border px-5 py-4 last:border-b-0">
+              <span className="grid size-7 shrink-0 place-items-center rounded-full text-sm font-bold"
+                style={{ background: "#16a34a22", color: "#16a34a" }}>
                 {i + 1}
               </span>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">{step}</p>
             </li>
           ))}
         </ol>
+
+        <button
+          onClick={() => onNavigate("jogos")}
+          className="mt-6 w-full rounded-2xl py-4 text-sm font-extrabold shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+          style={{ background: "#16a34a", color: "#fff", boxShadow: "0 4px 24px 0 #16a34a55" }}
+        >
+          ⚽ Ver bolões abertos agora
+        </button>
+
         <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground/80">
           Este é um bolão recreativo entre amigos/conhecidos. 20% do valor de cada aposta é retido
           pela organização para custos de manutenção, hospedagem e operação da plataforma. Ao

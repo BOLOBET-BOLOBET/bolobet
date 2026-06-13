@@ -1,20 +1,31 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { CircleDot, Lock } from "lucide-react"
-import { type Match, BET_VALUE, PRIZE_RATE } from "@/lib/bolobet"
+import { type Match } from "@/lib/bolobet"
 import { MatchCard } from "./match-card"
 
-export function JogosView({
-  matches,
-  onBet,
-}: {
-  matches: Match[]
-  onBet: (id: number) => void
-}) {
+export function JogosView({ matches, onBet }: { matches: Match[]; onBet: (id: number) => void }) {
   const abertos = matches.filter((m) => m.open)
   const futuros = matches.filter((m) => !m.open)
+  const [apostasInfo, setApostasInfo] = useState<Record<number, { total: number; porPlacar: Record<string, number> }>>({})
 
-  const prizeFor = (match: Match) => match.premio ?? 0
+  useEffect(() => {
+    const fetchApostas = async () => {
+      const infos: Record<number, any> = {}
+      await Promise.all(
+        abertos.map(async (m) => {
+          try {
+            const res = await fetch(`/api/apostas-jogo?matchId=${m.id}`)
+            const data = await res.json()
+            infos[m.id] = data
+          } catch {}
+        })
+      )
+      setApostasInfo(infos)
+    }
+    if (abertos.length > 0) fetchApostas()
+  }, [matches])
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-12 pt-24 animate-fade-up">
@@ -33,7 +44,14 @@ export function JogosView({
       ) : (
         <div className="grid gap-3">
           {abertos.map((m) => (
-            <MatchCard key={m.id} match={m} prize={prizeFor(m)} openable onBet={onBet} />
+            <MatchCard
+              key={m.id}
+              match={m}
+              prize={m.premio ?? 0}
+              openable
+              onBet={onBet}
+              apostasInfo={apostasInfo[m.id]}
+            />
           ))}
         </div>
       )}
@@ -42,9 +60,7 @@ export function JogosView({
         <Lock className="size-4 text-muted-foreground" />
         Bolões Futuros
       </h2>
-      <p className="mb-4 text-sm text-muted-foreground">
-        Ainda não liberados para apostas pela organização.
-      </p>
+      <p className="mb-4 text-sm text-muted-foreground">Ainda não liberados para apostas.</p>
 
       {futuros.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border py-12 text-center text-sm text-muted-foreground">
@@ -60,8 +76,7 @@ export function JogosView({
 
       <p className="mt-8 flex items-center justify-center gap-2 text-center text-xs leading-relaxed text-muted-foreground/80">
         <CircleDot className="size-3.5 shrink-0 text-primary/60" />
-        20% de cada aposta é retido para manutenção da plataforma. Os 80% restantes do total
-        arrecadado por jogo são destinados ao(s) vencedor(es) daquele jogo.
+        20% de cada aposta é retido para manutenção. Os 80% restantes vão para o(s) vencedor(es).
       </p>
     </main>
   )
