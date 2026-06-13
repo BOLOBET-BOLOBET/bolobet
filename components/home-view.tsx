@@ -16,9 +16,11 @@ const steps = [
 export function HomeView({
   stats,
   onNavigate,
+  onBetMatch,
 }: {
   stats: { apostas: number; premio: number; jogos: number }
   onNavigate: (p: Page) => void
+  onBetMatch?: (matchId: number) => void
 }) {
   const statCards = [
     { num: stats.apostas, label: "Apostas feitas", icon: Ticket },
@@ -63,9 +65,9 @@ export function HomeView({
 
       {/* Banner Brasil x Haiti */}
       <section className="mx-auto max-w-5xl px-4 pt-8 sm:px-5">
-        <button onClick={() => onNavigate("jogos")}
+        <button onClick={() => onBetMatch?.(31)}
           className="group block w-full overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-          <Image src="banner-brasil-haiti.png.webp" alt="Brasil x Haiti — Faça agora seu palpite"
+          <Image src="/banner-brasil-haiti_png.webp" alt="Brasil x Haiti — Faça agora seu palpite"
             width={1536} height={640}
             className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
         </button>
