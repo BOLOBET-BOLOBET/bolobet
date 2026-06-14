@@ -15,9 +15,8 @@ const steps = [
 ]
 
 const banners = [
-  { src: "/banner1.webp.webp", alt: "A sua melhor jogada começa aqui", matchId: null },
-  { src: "/banner2.webp.webp", alt: "Acerte placares e ganhe R$500 na final", matchId: null },
-  { src: "/banner-brasil-haiti.png.webp", alt: "Brasil x Haiti — Faça agora seu palpite", matchId: 31 },
+  { src: "/banner1.webp.webp", alt: "A sua melhor jogada começa aqui" },
+  { src: "/banner2.webp.webp", alt: "Acerte placares e ganhe R$500 na final" },
 ]
 
 export function HomeView({
@@ -42,19 +41,15 @@ export function HomeView({
     { num: stats.jogos, label: "Bolões abertos", icon: Flame },
   ]
 
-  const handleBannerClick = (b: typeof banners[0]) => {
-    if (b.matchId) onBetMatch?.(b.matchId)
-    else onNavigate("jogos")
-  }
-
   return (
     <div className="animate-fade-up pt-24">
+      {/* Carrossel */}
       <div className="mx-auto max-w-5xl px-4 sm:px-5">
         <div className="relative overflow-hidden rounded-3xl border border-border shadow-lg">
           <div className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${current * 100}%)` }}>
             {banners.map((b, i) => (
-              <button key={i} onClick={() => handleBannerClick(b)} className="relative min-w-full shrink-0">
+              <button key={i} onClick={() => onNavigate("jogos")} className="relative min-w-full shrink-0">
                 <Image src={b.src} alt={b.alt} width={1536} height={640} priority={i === 0}
                   className="h-auto w-full" />
               </button>
@@ -77,6 +72,7 @@ export function HomeView({
         </div>
       </div>
 
+      {/* Hero */}
       <section className="mx-auto max-w-3xl px-5 pt-8 text-center">
         <h1 className="text-balance text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
           O Bolão Oficial do <span className="text-primary">Hexa</span>
@@ -101,6 +97,16 @@ export function HomeView({
         </div>
       </section>
 
+      {/* Banner Brasil x Haiti */}
+      <section className="mx-auto max-w-5xl px-4 pt-8 sm:px-5">
+        <button onClick={() => onBetMatch?.(31)}
+          className="group block w-full overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+          <Image src="/banner-brasil-haiti.png.webp" alt="Brasil x Haiti — Faça agora seu palpite"
+            width={1536} height={640} className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
+        </button>
+      </section>
+
+      {/* Como funciona */}
       <section className="mx-auto max-w-3xl px-5 pb-10 pt-10">
         <h2 className="mb-4 flex items-center gap-2 text-xl font-extrabold">
           <ShieldCheck className="size-5 text-primary" /> Como funciona
