@@ -17,7 +17,7 @@ export function Navbar({ page, onNavigate }: { page: Page; onNavigate: (p: Page)
     <nav className="fixed left-1/2 top-4 z-[1000] w-[calc(100%-1.5rem)] max-w-3xl -translate-x-1/2">
       <div className="glass flex items-center justify-between gap-2 rounded-2xl border border-border/80 px-3 py-2 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] sm:px-5">
         <button onClick={() => onNavigate("home")} className="flex shrink-0 items-center gap-2">
-          <Image src="/LOGO.webp" alt="PalpitaAi" width={120} height={40} className="h-8 w-auto" />
+          <Image src="/LOGO PALPITA AI - BRANCA.png alt="PalpitaAi" width={120} height={40} className="h-8 w-auto" />
         </button>
         <div className="hide-scrollbar flex items-center gap-1 overflow-x-auto">
           {links.map(({ id, label, icon: Icon }) => {
