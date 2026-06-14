@@ -15,9 +15,9 @@ const steps = [
 ]
 
 const banners = [
-  { src: "/Banner_-_01_-_palpitaai.webp", alt: "A sua melhor jogada começa aqui", matchId: null },
-  { src: "/Banner_-_02_-_palpitaai.webp", alt: "Acerte placares e ganhe R$500 na final", matchId: null },
-  { src: "/banner-brasil-haiti_png.webp", alt: "Brasil x Haiti — Faça agora seu palpite", matchId: 31 },
+  { src: "/banner1.webp", alt: "A sua melhor jogada começa aqui", matchId: null },
+  { src: "/banner2.webp", alt: "Acerte placares e ganhe R$500 na final", matchId: null },
+  { src: "/banner-haiti.webp", alt: "Brasil x Haiti — Faça agora seu palpite", matchId: 31 },
 ]
 
 export function HomeView({
@@ -49,7 +49,6 @@ export function HomeView({
 
   return (
     <div className="animate-fade-up pt-24">
-      {/* Carousel */}
       <div className="mx-auto max-w-5xl px-4 sm:px-5">
         <div className="relative overflow-hidden rounded-3xl border border-border shadow-lg">
           <div className="flex transition-transform duration-500 ease-in-out"
