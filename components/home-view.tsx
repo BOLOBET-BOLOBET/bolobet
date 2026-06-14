@@ -15,9 +15,9 @@ const steps = [
 ]
 
 const banners = [
-  { src: "/banner1.webp", alt: "A sua melhor jogada começa aqui", matchId: null },
-  { src: "/banner2.webp", alt: "Acerte placares e ganhe R$500 na final", matchId: null },
-  { src: "/banner-haiti.webp", alt: "Brasil x Haiti — Faça agora seu palpite", matchId: 31 },
+  { src: "/banner1.webp.webp", alt: "A sua melhor jogada começa aqui", matchId: null },
+  { src: "/banner2.webp.webp", alt: "Acerte placares e ganhe R$500 na final", matchId: null },
+  { src: "/banner-brasil-haiti.png.webp", alt: "Brasil x Haiti — Faça agora seu palpite", matchId: 31 },
 ]
 
 export function HomeView({
