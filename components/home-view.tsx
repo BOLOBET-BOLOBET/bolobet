@@ -45,13 +45,15 @@ export function HomeView({
     <div className="animate-fade-up pt-24">
       {/* Carrossel */}
       <div className="mx-auto max-w-5xl px-4 sm:px-5">
-        <div className="relative overflow-hidden rounded-3xl border border-border shadow-lg">
-          <div className="flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${current * 100}%)` }}>
+        <div className="relative overflow-hidden rounded-3xl border border-border shadow-lg"
+          style={{ aspectRatio: "1536/1024" }}>
+          <div className="flex h-full transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${current * 100}%)`, width: `${banners.length * 100}%` }}>
             {banners.map((b, i) => (
-              <button key={i} onClick={() => onNavigate("jogos")} className="relative min-w-full shrink-0">
-                <Image src={b.src} alt={b.alt} width={1536} height={640} priority={i === 0}
-                  className="h-auto w-full object-cover" />
+              <button key={i} onClick={() => onNavigate("jogos")}
+                className="relative h-full shrink-0"
+                style={{ width: `${100 / banners.length}%` }}>
+                <Image src={b.src} alt={b.alt} fill className="object-cover" priority={i === 0} />
               </button>
             ))}
           </div>
@@ -100,9 +102,10 @@ export function HomeView({
       {/* Banner Brasil x Haiti */}
       <section className="mx-auto max-w-5xl px-4 pt-8 sm:px-5">
         <button onClick={() => onBetMatch?.(31)}
-          className="group block w-full overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+          className="group relative block w-full overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          style={{ aspectRatio: "1536/640" }}>
           <Image src="/banner-brasil-haiti.png.webp" alt="Brasil x Haiti — Faça agora seu palpite"
-            width={1536} height={640} className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
         </button>
       </section>
 
