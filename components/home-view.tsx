@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { ArrowRight, Ticket, Trophy, Flame, ShieldCheck } from "lucide-react"
+import { useEffect, useState } from "react"
+import { ArrowRight, Ticket, Trophy, Flame, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react"
 import { formatBRL } from "@/lib/bolobet"
 import type { Page } from "./navbar"
 
@@ -13,6 +14,12 @@ const steps = [
   "80% do total arrecadado vai para quem acertar o placar exato. 20% fica para manutenção da plataforma.",
 ]
 
+const banners = [
+  { src: "/Banner_-_01_-_palpitaai.webp", alt: "A sua melhor jogada começa aqui", matchId: null },
+  { src: "/Banner_-_02_-_palpitaai.webp", alt: "Acerte placares e ganhe R$500 na final", matchId: null },
+  { src: "/banner-brasil-haiti_png.webp", alt: "Brasil x Haiti — Faça agora seu palpite", matchId: 31 },
+]
+
 export function HomeView({
   stats,
   onNavigate,
@@ -22,20 +29,53 @@ export function HomeView({
   onNavigate: (p: Page) => void
   onBetMatch?: (matchId: number) => void
 }) {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrent((c) => (c + 1) % banners.length), 4000)
+    return () => clearInterval(timer)
+  }, [])
+
   const statCards = [
     { num: stats.apostas, label: "Apostas feitas", icon: Ticket },
     { num: formatBRL(stats.premio), label: "Prêmio acumulado", icon: Trophy },
     { num: stats.jogos, label: "Bolões abertos", icon: Flame },
   ]
 
+  const handleBannerClick = (b: typeof banners[0]) => {
+    if (b.matchId) onBetMatch?.(b.matchId)
+    else onNavigate("jogos")
+  }
+
   return (
     <div className="animate-fade-up pt-24">
+      {/* Carousel */}
       <div className="mx-auto max-w-5xl px-4 sm:px-5">
-        <button onClick={() => onNavigate("jogos")} aria-label="Apostar agora"
-          className="group relative block w-full overflow-hidden rounded-3xl border border-border shadow-lg shadow-primary/5 transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/15">
-          <Image src="/banner.png" alt="BOLOBET" width={1536} height={1024} priority
-            className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
-        </button>
+        <div className="relative overflow-hidden rounded-3xl border border-border shadow-lg">
+          <div className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${current * 100}%)` }}>
+            {banners.map((b, i) => (
+              <button key={i} onClick={() => handleBannerClick(b)} className="relative min-w-full shrink-0">
+                <Image src={b.src} alt={b.alt} width={1536} height={640} priority={i === 0}
+                  className="h-auto w-full" />
+              </button>
+            ))}
+          </div>
+          <button onClick={() => setCurrent((c) => (c - 1 + banners.length) % banners.length)}
+            className="absolute left-3 top-1/2 -translate-y-1/2 grid size-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-black/70">
+            <ChevronLeft className="size-5" />
+          </button>
+          <button onClick={() => setCurrent((c) => (c + 1) % banners.length)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 grid size-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-black/70">
+            <ChevronRight className="size-5" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+            {banners.map((_, i) => (
+              <button key={i} onClick={() => setCurrent(i)}
+                className={`h-2 rounded-full transition-all ${i === current ? "w-5 bg-white" : "w-2 bg-white/50"}`} />
+            ))}
+          </div>
+        </div>
       </div>
 
       <section className="mx-auto max-w-3xl px-5 pt-8 text-center">
@@ -51,7 +91,6 @@ export function HomeView({
           ⚽ Apostar agora
           <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
         </button>
-
         <div className="mt-8 grid grid-cols-3 gap-3">
           {statCards.map(({ num, label, icon: Icon }) => (
             <div key={label} className="group rounded-2xl border border-border bg-card p-4 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
@@ -61,16 +100,6 @@ export function HomeView({
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Banner Brasil x Haiti */}
-      <section className="mx-auto max-w-5xl px-4 pt-8 sm:px-5">
-        <button onClick={() => onBetMatch?.(31)}
-          className="group block w-full overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-          <Image src="/banner-brasil-haiti.png.webp" alt="Brasil x Haiti — Faça agora seu palpite"
-            width={1536} height={640}
-            className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
-        </button>
       </section>
 
       <section className="mx-auto max-w-3xl px-5 pb-10 pt-10">
