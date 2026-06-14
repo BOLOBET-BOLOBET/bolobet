@@ -51,7 +51,7 @@ export function HomeView({
             {banners.map((b, i) => (
               <button key={i} onClick={() => onNavigate("jogos")} className="relative min-w-full shrink-0">
                 <Image src={b.src} alt={b.alt} width={1536} height={640} priority={i === 0}
-                  className="h-auto w-full" />
+                  className="h-auto w-full object-cover" />
               </button>
             ))}
           </div>
@@ -102,7 +102,7 @@ export function HomeView({
         <button onClick={() => onBetMatch?.(31)}
           className="group block w-full overflow-hidden rounded-3xl shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
           <Image src="/banner-brasil-haiti.png.webp" alt="Brasil x Haiti — Faça agora seu palpite"
-            width={1536} height={640} className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
+            width={1536} height={640} className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
         </button>
       </section>
 
