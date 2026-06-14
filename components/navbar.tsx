@@ -16,8 +16,8 @@ export function Navbar({ page, onNavigate }: { page: Page; onNavigate: (p: Page)
     <nav className="fixed left-1/2 top-4 z-[1000] w-[calc(100%-1.5rem)] max-w-3xl -translate-x-1/2">
       <div className="glass flex items-center justify-between gap-2 rounded-2xl border border-border/80 px-3 py-2 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] sm:px-5">
         <button onClick={() => onNavigate("home")}
-          className="text-lg font-extrabold tracking-tight text-primary">
-          Palpita<span className="text-foreground">Ai</span>
+          className="text-lg font-extrabold tracking-tight">
+          <span className="text-foreground">Palpita</span><span style={{ color: "#16a34a" }}>ai</span>
         </button>
         <div className="hide-scrollbar flex items-center gap-1 overflow-x-auto">
           {links.map(({ id, label, icon: Icon }) => {
