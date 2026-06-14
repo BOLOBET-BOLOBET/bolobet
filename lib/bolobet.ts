@@ -1,5 +1,5 @@
-export const PIX_KEY = "75997132736"
-export const WHATSAPP_NUM = "5575997132736"
+export const PIX_KEY = "75998264463"
+export const WHATSAPP_NUM = "5571997132736"
 export const BET_VALUE = 10
 export const PRIZE_RATE = 0.8
 export const MAX_PER_SCORE = 3
