@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { CircleDot, Lock } from "lucide-react"
 import { type Match } from "@/lib/bolobet"
 import { MatchCard } from "./match-card"
@@ -8,24 +7,6 @@ import { MatchCard } from "./match-card"
 export function JogosView({ matches, onBet }: { matches: Match[]; onBet: (id: number) => void }) {
   const abertos = matches.filter((m) => m.open)
   const futuros = matches.filter((m) => !m.open)
-  const [apostasInfo, setApostasInfo] = useState<Record<number, { total: number; porPlacar: Record<string, number> }>>({})
-
-  useEffect(() => {
-    const fetchApostas = async () => {
-      const infos: Record<number, any> = {}
-      await Promise.all(
-        abertos.map(async (m) => {
-          try {
-            const res = await fetch(`/api/apostas-jogo?matchId=${m.id}`)
-            const data = await res.json()
-            infos[m.id] = data
-          } catch {}
-        })
-      )
-      setApostasInfo(infos)
-    }
-    if (abertos.length > 0) fetchApostas()
-  }, [matches])
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-12 pt-24 animate-fade-up">
@@ -44,14 +25,7 @@ export function JogosView({ matches, onBet }: { matches: Match[]; onBet: (id: nu
       ) : (
         <div className="grid gap-3">
           {abertos.map((m) => (
-            <MatchCard
-              key={m.id}
-              match={m}
-              prize={m.premio ?? 0}
-              openable
-              onBet={onBet}
-              apostasInfo={apostasInfo[m.id]}
-            />
+            <MatchCard key={m.id} match={m} openable onBet={onBet} />
           ))}
         </div>
       )}
@@ -69,7 +43,7 @@ export function JogosView({ matches, onBet }: { matches: Match[]; onBet: (id: nu
       ) : (
         <div className="grid gap-3">
           {futuros.map((m) => (
-            <MatchCard key={m.id} match={m} prize={0} openable={false} />
+            <MatchCard key={m.id} match={m} openable={false} />
           ))}
         </div>
       )}
